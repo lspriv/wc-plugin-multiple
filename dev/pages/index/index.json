@@ -1,0 +1,7 @@
+{
+	"usingComponents": {
+		"calendar": "@lspriv/wx-calendar"
+	},
+	"disableScroll": true,
+	"navigationStyle": "custom"
+}
