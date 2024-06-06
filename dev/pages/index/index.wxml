@@ -1,0 +1,9 @@
+<view class="container" style="padding-top: {{ padding }}px;">
+  <calendar 
+    id="calendar" 
+    bindload="handleLoad"
+    bindchange="handleChange" 
+    bindviewchange="handleViewChange"
+    bindschedule="handleSchedule">
+  </calendar>
+</view>

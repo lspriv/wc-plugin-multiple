@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "es2015",
+    "baseUrl": ".",
+    "paths": {
+      "@lspriv/wx-calendar/*": [
+        "./node_modules/@lspriv/wx-calendar/dist/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
