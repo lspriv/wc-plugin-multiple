@@ -50,5 +50,7 @@
     "ignore": [],
     "include": []
   },
-  "appid": "wx972e972e4d0efd61"
+  "appid": "wx972e972e4d0efd61",
+  "projectname": "dev",
+  "libVersion": "3.3.4"
 }
