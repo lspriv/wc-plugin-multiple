@@ -78,9 +78,9 @@ Page({
     </tr>
     <tr>
         <td>borderRadius</td>
-        <td>string</td>
-        <td>选中背景圆角</td>
-        <td>50%</td>
+        <td>number</td>
+        <td>选中背景圆角（单位rpx）</td>
+        <td>50</td>
     </tr>
 </table>
 
