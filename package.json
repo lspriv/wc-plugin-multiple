@@ -1,6 +1,6 @@
 {
   "name": "@lspriv/wc-plugin-multiple",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0",
   "description": "小程序日历组件多选插件",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
