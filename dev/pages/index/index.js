@@ -3,7 +3,7 @@
  * @Author: lishen
  * @Date: 2023-08-31 16:46:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-08 01:06:39
+ * @LastEditTime: 2024-06-08 22:16:48
  */
 const { WxCalendar } = require('@lspriv/wx-calendar/lib');
 const { MultiPlugin, MULTI_PLUGIN_KEY } = require('../../plugins/wc-plugin-multiple/index');
@@ -23,9 +23,12 @@ Page({
   handleLoad() {
     const calendar = this.selectComponent('#calendar');
     const multiSelector = calendar.getPlugin(MULTI_PLUGIN_KEY);
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
     multiSelector.select([
-      { year: 2024, month: 6, day: 3 },
-      { year: 2024, month: 6, day: 28 }
+      { year, month, day: 3 },
+      { year, month, day: 28 }
     ]);
   },
   handleChange({ detail }) {
