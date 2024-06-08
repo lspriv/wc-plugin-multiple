@@ -4,32 +4,41 @@
  * See File LICENSE for detail or copy at https://opensource.org/licenses/MIT
  * @Description: Description
  * @Author: lspriv
- * @LastEditTime: 2024-06-08 00:46:33
+ * @LastEditTime: 2024-06-08 22:07:32
  */
 import {
   type Plugin,
   type PluginService,
   type CalendarDay,
   type CalendarEventDetail,
+  type Nullable,
+  type TrackDateResult,
+  type CalendarData,
+  type DateStyle,
+  type DateRange,
+  type WcDateStyle,
+  type OnceEmiter,
+  type TrackYearResult,
+  type WcAnnualMark,
+  type WcAnnualMarks,
+  type WcYear,
+  isLeapYear,
   timestamp,
-  Nullable,
-  TrackDateResult,
-  CalendarData,
-  DateStyle,
-  DateRange,
+  themeStyle,
   addLayoutHideCls,
-  OnceEmiter
+  getAnnualMarkKey,
+  GREGORIAN_MONTH_DAYS
 } from '@lspriv/wx-calendar/lib';
-
 interface MultiSelOpts {
   type: 'range' | 'multi';
-  bgColor: string;
-  textColor: string;
-  borderRadius: string;
+  bgColor: WcDateStyle;
+  textColor: WcDateStyle;
+  borderRadius: number;
 }
 
 export interface ChangeEventDtail {
   checked: Array<CalendarDay>;
+  validDates: Array<CalendarDay | CalendarDay[]>;
 }
 
 type PluginDateRange = [start: CalendarDay, end: CalendarDay];
@@ -52,7 +61,7 @@ export class MultiPlugin implements Plugin {
 
   private _range_: Array<number> = [];
 
-  private baseStyle: Record<string, string>;
+  private baseStyle: Record<string, string | number>;
 
   private service: PluginService;
 
@@ -65,21 +74,21 @@ export class MultiPlugin implements Plugin {
   private formOptions(options?: Partial<MultiSelOpts>): MultiSelOpts {
     return {
       type: options?.type || 'range',
-      bgColor: options?.bgColor || 'var(--wc-checked-today-bg)',
-      textColor: options?.textColor || 'var(--wc-bg)',
-      borderRadius: options?.borderRadius || '50%'
+      bgColor: options?.bgColor || { light: '#409EFF', dark: '#409EFF' },
+      textColor: options?.textColor || { light: '#FFF', dark: '#000' },
+      borderRadius: options?.borderRadius || 50
     };
   }
 
   private formBaseStyle() {
-    const textColor = this.options.textColor;
+    const textColor = themeStyle(this.options.textColor)!;
     this.baseStyle = {
       '--wc-date-color': textColor,
       '--wc-solar-color': textColor,
       '--wc-mark-color': textColor,
       '--wc-dot-color': textColor,
       '--wc-today-color': textColor,
-      backgroundColor: this.options.bgColor,
+      backgroundColor: themeStyle(this.options.bgColor)!,
       borderRadius: this.options.borderRadius,
       overflow: 'hidden',
       transition: 'background-color .3s ease'
@@ -97,6 +106,7 @@ export class MultiPlugin implements Plugin {
     areaHideCls = addLayoutHideCls(areaHideCls, 'today');
     sets.areaHideCls = areaHideCls;
     service.component._pointer_.show = false;
+    service.component._printer_.renderCheckedBg = false;
   }
 
   PLUGIN_ON_CLICK(_: PluginService, detail: CalendarEventDetail) {
@@ -147,9 +157,9 @@ export class MultiPlugin implements Plugin {
         result = { style: { ...this.baseStyle } };
         const borderRadius = this.options.borderRadius;
         if (currstamp === this._range_[0]) {
-          (result.style as DateStyle).borderRadius = `${borderRadius} 0 0 ${borderRadius}`;
+          (result.style as DateStyle).borderRadius = `${borderRadius}rpx 0 0 ${borderRadius}rpx`;
         } else if (currstamp === this._range_[1]) {
-          (result.style as DateStyle).borderRadius = `0 ${borderRadius} ${borderRadius} 0`;
+          (result.style as DateStyle).borderRadius = `0 ${borderRadius}rpx ${borderRadius}rpx 0`;
         } else {
           (result.style as DateStyle).borderRadius = '0';
         }
@@ -157,6 +167,55 @@ export class MultiPlugin implements Plugin {
     }
 
     return result;
+  }
+
+  PLUGIN_TRACK_YEAR(year: WcYear): Nullable<TrackYearResult> {
+    const marks: WcAnnualMarks = new Map();
+    for (let i = 0; i < 12; i++) {
+      const days = i === 1 && isLeapYear(year.year) ? GREGORIAN_MONTH_DAYS[i] + 1 : GREGORIAN_MONTH_DAYS[i];
+      for (let j = 0; j < days; j++) {
+        const date = { year: year.year, month: i + 1, day: j + 1 };
+        const key = `${year.year}-${date.month}-${date.day}`;
+        const markkey = getAnnualMarkKey({ month: date.month, day: date.day });
+
+        if (this.options.type === 'multi') {
+          if (this.checked.has(key)) {
+            const set: WcAnnualMark = {};
+            const borderRadius = this.options.borderRadius;
+            set.style = {
+              color: { ...this.options.textColor },
+              bgColor: { ...this.options.bgColor },
+              bgTLRadius: { light: borderRadius, dark: borderRadius },
+              bgTRRadius: { light: borderRadius, dark: borderRadius },
+              bgBLRadius: { light: borderRadius, dark: borderRadius },
+              bgBRRadius: { light: borderRadius, dark: borderRadius }
+            };
+            marks.set(markkey, set);
+          }
+        } else {
+          const currstamp = timestamp(date);
+          if (currstamp >= this._range_[0] && currstamp <= this._range_[1]) {
+            const set: WcAnnualMark = {};
+            const borderRadius = this.options.borderRadius;
+            set.style = {
+              color: { ...this.options.textColor },
+              bgColor: { ...this.options.bgColor },
+              bgWidth: { light: 'dateCol', dark: 'dateCol' }
+            };
+            if (currstamp === this._range_[0]) {
+              set.style.bgTLRadius = { light: borderRadius, dark: borderRadius };
+              set.style.bgBLRadius = { light: borderRadius, dark: borderRadius };
+            } else if (currstamp === this._range_[1]) {
+              set.style.bgTRRadius = { light: borderRadius, dark: borderRadius };
+              set.style.bgBRRadius = { light: borderRadius, dark: borderRadius };
+            }
+            marks.set(markkey, set);
+          }
+        }
+      }
+    }
+
+    return marks.size ? { marks } : null;
   }
 
   PLUGIN_ON_CHANGE(service: PluginService, detail: CalendarEventDetail, emiter: OnceEmiter) {
@@ -222,17 +281,42 @@ export class MultiPlugin implements Plugin {
   }
 
   private emitChange(checked: Array<CalendarDay>) {
-    this.service.component.triggerEvent<ChangeEventDtail>('change', { checked });
+    this.service.component.triggerEvent<ChangeEventDtail>('change', {
+      checked,
+      validDates: this.filterDates(checked)
+    });
   }
 
   private updateDates(dates: CalendarDay[][]) {
     if (this.options.type === 'multi') {
       const updates = dates.flatMap(item => item);
+      const years = [...new Set(updates.map(item => item.year))];
       this.service.updateDates(updates);
+      this.service.updateAnnuals(years);
     } else {
       const updates = dates.filter(item => item.length);
+      const years = [
+        ...new Set(
+          updates.flatMap(item => {
+            if (item.length > 1) {
+              const arr: number[] = [];
+              for (let i = item[0].year; i <= item[1].year; i++) arr.push(i);
+              return arr;
+            } else return item[0].year;
+          })
+        )
+      ];
       this.service.updateRange(updates as DateRange);
+      this.service.updateAnnuals(years);
     }
+  }
+
+  private filterDates(dates: Array<CalendarDay>) {
+    let _dates: Array<CalendarDay | CalendarDay[]> = this.options.type === 'multi' ? dates : [[dates[0], dates[1]]];
+    this.service.traversePlugins(plugin => {
+      plugin.PLUGIN_DATES_FILTER && (_dates = plugin.PLUGIN_DATES_FILTER(this.service, _dates as CalendarDay[]));
+    });
+    return _dates;
   }
 }
 

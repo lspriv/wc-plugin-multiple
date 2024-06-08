@@ -5,7 +5,7 @@
 
 小程序日历 [`wx-calendar`](https://github.com/lspriv/wx-calendar) 多选插件
 
-[![pktB9yT.png](https://s21.ax1x.com/2024/06/08/pktB9yT.png)](https://imgse.com/i/pktB9yT)
+[![pktvhAU.png](https://s21.ax1x.com/2024/06/08/pktvhAU.png)](https://imgse.com/i/pktvhAU)
 
 ### 使用
 - 小程序基础库 `SDKVersion` >= 3.0.0
@@ -66,15 +66,15 @@ Page({
     </tr>
     <tr>
         <td>bgColor</td>
-        <td>string</td>
+        <td>{ light: string; dark: string; }</td>
         <td>选中背景色</td>
-        <td>var(--wc-checked-today-bg)</td>
+        <td>{ light: '#409EFF', dark: '#409EFF' }</td>
     </tr>
     <tr>
         <td>textColor</td>
-        <td>string</td>
+        <td>{ light: string; dark: string; }</td>
         <td>选中字体色</td>
-        <td>true</td>
+        <td>{ light: '#FFF', dark: '#000' }</td>
     </tr>
     <tr>
         <td>borderRadius</td>
@@ -89,7 +89,8 @@ Page({
 [***`bindchange`***](#bindchange)  日期选中变化
 ```typescript
 type ChangeEventDetail = {
-    checked: Array<CalenderDay>; // 当前选择日期
+    checked: Array<CalenderDay>; // 当前选中日期
+    validDates: Array<CalenderDay | [start: CalenderDay, end: CalenderDay]>; // 有效日期，是由单个有效日期和日期有效范围组成的数组
 }
 ```
 
