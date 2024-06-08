@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "module": "ES2015",
+        "target": "ES2018",
+        "lib": ["ES2015", "ES2020", "DOM"],
+        "moduleResolution": "node",
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "baseUrl": ".",
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata":true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "paths": {
+            "@lspriv/wx-calendar/*": ["./node_modules/@lspriv/wx-calendar/dist/*"]
+        }
+    },
+    "files": [
+        "node_modules/miniprogram-api-typings/index.d.ts",
+        "node_modules/@lspriv/wx-calendar/global.d.ts"
+    ],
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dev"
+    ]
+}
