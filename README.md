@@ -74,7 +74,7 @@ Page({
         <td>textColor</td>
         <td>{ light: string; dark: string; }</td>
         <td>选中字体色</td>
-        <td>{ light: '#FFF', dark: '#000' }</td>
+        <td>{ light: '#FFF', dark: '#E5E5E5' }</td>
     </tr>
     <tr>
         <td>borderRadius</td>

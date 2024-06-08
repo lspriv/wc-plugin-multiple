@@ -4,7 +4,7 @@
  * See File LICENSE for detail or copy at https://opensource.org/licenses/MIT
  * @Description: Description
  * @Author: lspriv
- * @LastEditTime: 2024-06-08 22:07:32
+ * @LastEditTime: 2024-06-08 22:58:50
  */
 import {
   type Plugin,
@@ -75,7 +75,7 @@ export class MultiPlugin implements Plugin {
     return {
       type: options?.type || 'range',
       bgColor: options?.bgColor || { light: '#409EFF', dark: '#409EFF' },
-      textColor: options?.textColor || { light: '#FFF', dark: '#000' },
+      textColor: options?.textColor || { light: '#FFF', dark: '#E5E5E5' },
       borderRadius: options?.borderRadius || 50
     };
   }
