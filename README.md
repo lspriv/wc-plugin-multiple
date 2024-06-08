@@ -26,7 +26,7 @@ npm i @lspriv/wc-plugin-multiple -S
 ```
 ```javascript
 const { WxCalendar } = require('@lspriv/wx-calendar/lib');
-const { MultiPlugin, MULTI_PLUGIN_KEY } = require('@lspriv/wc-plugin-ics');
+const { MultiPlugin, MULTI_PLUGIN_KEY } = require('@lspriv/wc-plugin-multiple');
 
 WxCalendar.use(MultiPlugin, { 
   ... // 见插件选项，也可以不传选项，使用默认选项
@@ -78,9 +78,9 @@ Page({
     </tr>
     <tr>
         <td>borderRadius</td>
-        <td>string</td>
-        <td>选中背景圆角</td>
-        <td>50%</td>
+        <td>number</td>
+        <td>选中背景圆角（单位rpx）</td>
+        <td>50</td>
     </tr>
 </table>
 
