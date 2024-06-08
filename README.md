@@ -26,7 +26,7 @@ npm i @lspriv/wc-plugin-multiple -S
 ```
 ```javascript
 const { WxCalendar } = require('@lspriv/wx-calendar/lib');
-const { MultiPlugin, MULTI_PLUGIN_KEY } = require('@lspriv/wc-plugin-ics');
+const { MultiPlugin, MULTI_PLUGIN_KEY } = require('@lspriv/wc-plugin-multiple');
 
 WxCalendar.use(MultiPlugin, { 
   ... // 见插件选项，也可以不传选项，使用默认选项
