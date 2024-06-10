@@ -4,7 +4,7 @@
  * See File LICENSE for detail or copy at https://opensource.org/licenses/MIT
  * @Description: Description
  * @Author: lspriv
- * @LastEditTime: 2024-06-08 22:58:50
+ * @LastEditTime: 2024-06-10 08:10:51
  */
 import {
   type Plugin,
@@ -16,6 +16,7 @@ import {
   type CalendarData,
   type DateStyle,
   type DateRange,
+  type DateRanges,
   type WcDateStyle,
   type OnceEmiter,
   type TrackYearResult,
@@ -29,7 +30,7 @@ import {
   getAnnualMarkKey,
   GREGORIAN_MONTH_DAYS
 } from '@lspriv/wx-calendar/lib';
-interface MultiSelOpts {
+export interface MultiSelOpts {
   type: 'range' | 'multi';
   bgColor: WcDateStyle;
   textColor: WcDateStyle;
@@ -38,7 +39,7 @@ interface MultiSelOpts {
 
 export interface ChangeEventDtail {
   checked: Array<CalendarDay>;
-  validDates: Array<CalendarDay | CalendarDay[]>;
+  validDates: Array<CalendarDay | DateRange>;
 }
 
 type PluginDateRange = [start: CalendarDay, end: CalendarDay];
@@ -107,6 +108,10 @@ export class MultiPlugin implements Plugin {
     sets.areaHideCls = areaHideCls;
     service.component._pointer_.show = false;
     service.component._printer_.renderCheckedBg = false;
+  }
+
+  PLUGIN_CATCH_TAP(service: PluginService) {
+    service.component._pointer_.show = false;
   }
 
   PLUGIN_ON_CLICK(_: PluginService, detail: CalendarEventDetail) {
@@ -306,15 +311,15 @@ export class MultiPlugin implements Plugin {
           })
         )
       ];
-      this.service.updateRange(updates as DateRange);
+      this.service.updateRange(updates as DateRanges);
       this.service.updateAnnuals(years);
     }
   }
 
   private filterDates(dates: Array<CalendarDay>) {
-    let _dates: Array<CalendarDay | CalendarDay[]> = this.options.type === 'multi' ? dates : [[dates[0], dates[1]]];
-    this.service.traversePlugins(plugin => {
-      plugin.PLUGIN_DATES_FILTER && (_dates = plugin.PLUGIN_DATES_FILTER(this.service, _dates as CalendarDay[]));
+    let _dates: Array<CalendarDay | DateRange> = this.options.type === 'multi' ? dates : [[dates[0], dates[1]]];
+    this.service.traversePlugins((plugin, key) => {
+      plugin.PLUGIN_DATES_FILTER && (_dates = plugin.PLUGIN_DATES_FILTER(this.service, _dates));
     });
     return _dates;
   }
