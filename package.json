@@ -1,6 +1,6 @@
 {
   "name": "@lspriv/wc-plugin-multiple",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "小程序日历组件多选插件",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
@@ -31,7 +31,7 @@
   "devDependencies": {
     "@inquirer/prompts": "^3.3.2",
     "@lspriv/wc-shared": "^1.2.0",
-    "@lspriv/wx-calendar": "^1.7.0",
+    "@lspriv/wx-calendar": "^1.7.1",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
@@ -59,6 +59,6 @@
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "@lspriv/wx-calendar": "^1.7.0"
+    "@lspriv/wx-calendar": "^1.7.1"
   }
 }
