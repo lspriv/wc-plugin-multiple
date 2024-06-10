@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/lspriv/wc-plugin-multiple/compare/v1.0.2...v1.0.3) (2024-06-10)
+
+
+### Bug Fixes
+
+* 调整发包错误,此版本同 1.0.2 ([320d2d9](https://github.com/lspriv/wc-plugin-multiple/commit/320d2d92da5f9a40eae53e1f23b288ad1f3b967c))
+
 ## [1.0.2](https://github.com/lspriv/wc-plugin-multiple/compare/v1.0.1...v1.0.2) (2024-06-10)
 
 
