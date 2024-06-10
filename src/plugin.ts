@@ -4,7 +4,7 @@
  * See File LICENSE for detail or copy at https://opensource.org/licenses/MIT
  * @Description: Description
  * @Author: lspriv
- * @LastEditTime: 2024-06-10 08:10:51
+ * @LastEditTime: 2024-06-10 09:02:56
  */
 import {
   type Plugin,
@@ -317,8 +317,9 @@ export class MultiPlugin implements Plugin {
   }
 
   private filterDates(dates: Array<CalendarDay>) {
+    if (!dates.length) return [];
     let _dates: Array<CalendarDay | DateRange> = this.options.type === 'multi' ? dates : [[dates[0], dates[1]]];
-    this.service.traversePlugins((plugin, key) => {
+    this.service.traversePlugins(plugin => {
       plugin.PLUGIN_DATES_FILTER && (_dates = plugin.PLUGIN_DATES_FILTER(this.service, _dates));
     });
     return _dates;
